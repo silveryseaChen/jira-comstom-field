@@ -1,0 +1,6 @@
+#disable_html_escaping()
+#if ($ctx.featureManager.isEnabled("com.atlassian.jira.plugin.export.xml.unified.enabled"))
+    <customfieldvalue id="$!value.id">#xmlEscape($!value.summary)</customfieldvalue>
+#else
+    <customfieldvalue>$!value.id</customfieldvalue>
+#end

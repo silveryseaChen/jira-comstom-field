@@ -1,0 +1,9 @@
+#customControlHeader ($action $customField.id $customField.name $fieldLayoutItem.required $displayParameters $auiparams)
+<select class="select" id="$customField.id" name="$customField.id">
+    #foreach ($option in $configs.options)
+        <option#if ($value && $value == $option.key) selected="selected"#end value="$option.key">
+            $textutils.htmlEncode($option.summary)
+        </option>
+    #end
+</select>
+#customControlFooter ($action $customField.id $fieldLayoutItem.fieldDescription $displayParameters $auiparams)

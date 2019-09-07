@@ -1,0 +1,4 @@
+#if ($value)
+    #set ($url = "$requestContext.baseUrl/browse/$urlcodec.encode($value.key)")
+    <a href="$textutils.htmlEncode($url)" class="tinylink">$textutils.htmlEncode($value.summary)</a>
+#end

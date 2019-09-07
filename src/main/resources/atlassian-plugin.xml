@@ -1,0 +1,33 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="jira-comstom-field"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="jira-comstom-field-resources" name="jira-comstom-field Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="jira-comstom-field.css" location="/css/jira-comstom-field.css"/>
+        <resource type="download" name="jira-comstom-field.js" location="/js/jira-comstom-field.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>jira-comstom-field</context>
+    </web-resource>
+
+    <customfield-type key="issueSelect" name="issue select" class="com.chy.customfields.type.IssueSelectCFType">
+        <description>
+            Choose a issue from the project.
+        </description>
+        <resource type="velocity" name="view"  location="/templates/customfields/type/view-issue.vm" />
+        <resource type="velocity" name="edit" location="/templates/customfields/type/edit-issue.vm" />
+        <resource type="velocity" name="xml" location="/templates/customfields/type/xml-issue.vm" />
+    </customfield-type>
+    
+</atlassian-plugin>
