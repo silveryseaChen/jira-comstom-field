@@ -21,13 +21,24 @@
         <context>jira-comstom-field</context>
     </web-resource>
 
-    <customfield-type key="issueSelect" name="issue select" class="com.chy.customfields.type.IssueSelectCFType">
+    <customfield-type key="issueSelectCFType" name="issue select type" class="com.chy.customfields.type.IssueSelectCFType">
         <description>
             Choose a issue from the project.
         </description>
-        <resource type="velocity" name="view"  location="/templates/customfields/type/view-issue.vm" />
-        <resource type="velocity" name="edit" location="/templates/customfields/type/edit-issue.vm" />
-        <resource type="velocity" name="xml" location="/templates/customfields/type/xml-issue.vm" />
+        <resource type="velocity" name="view"  location="templates/customfields/type/view-issue.vm" />
+        <resource type="velocity" name="edit" location="templates/customfields/type/edit-issue.vm" />
+        <resource type="velocity" name="xml" location="templates/customfields/type/xml-issue.vm" />
     </customfield-type>
+    <customfield-searcher key="issueSelectCFSearcher" name="issueSelectCF Searcher"
+                          i18n-name-key="issue.customfield.searcher.labels.name"
+                          class="com.chy.customfields.searcher.IssueSelectCFSearcher">
+        <description key="issue.customfield.searcher.desc">Search for values matching labels.</description>
+        <resource type="velocity" name="label" location="templates/customfields/searcher/label-issue.vm"/>
+        <!--<resource type="velocity" name="search" location="templates/customfields/searcher/search-select-issue.vm"/>-->
+        <resource type="velocity" name="search" location="templates/customfields/searcher/search-input-issue.vm"/>
+        <resource type="velocity" name="view" location="templates/customfields/searcher/view-issue.vm"/>
+
+        <valid-customfield-type package="${atlassian.plugin.key}" key="issueSelectCFType"/>
+    </customfield-searcher>
     
 </atlassian-plugin>

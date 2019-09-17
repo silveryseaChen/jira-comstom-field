@@ -8,6 +8,8 @@ import com.atlassian.jira.issue.customfields.manager.GenericConfigManager;
 import com.atlassian.jira.issue.customfields.persistence.CustomFieldValuePersister;
 import com.atlassian.jira.issue.customfields.persistence.PersistenceFieldType;
 import com.atlassian.jira.issue.fields.config.FieldConfigItemType;
+import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
+import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
@@ -32,13 +34,23 @@ public class IssueSelectCFType extends AbstractSingleFieldType<Issue> {
     private CustomFieldValuePersister customFieldValuePersister;
     @ComponentImport
     private GenericConfigManager genericConfigManager;
+    @ComponentImport
+    private FieldConfigSchemeManager fieldConfigSchemeManager;
+    @ComponentImport
+    private ProjectManager projectManager;
 
     @Inject
-    public IssueSelectCFType(CustomFieldValuePersister customFieldValuePersister, GenericConfigManager genericConfigManager,
-        IssueManager issueManager, JiraAuthenticationContext jiraAuthenticationContext) {
+    public IssueSelectCFType(CustomFieldValuePersister customFieldValuePersister,
+                             GenericConfigManager genericConfigManager,
+                             IssueManager issueManager,
+                             JiraAuthenticationContext jiraAuthenticationContext,
+                             FieldConfigSchemeManager fieldConfigSchemeManager,
+                             ProjectManager projectManager) {
         super(customFieldValuePersister, genericConfigManager);
         this.issueManager = issueManager;
         this.jiraAuthenticationContext = jiraAuthenticationContext;
+        this.fieldConfigSchemeManager = fieldConfigSchemeManager;
+        this.projectManager = projectManager;
     }
 
     /**
@@ -48,7 +60,9 @@ public class IssueSelectCFType extends AbstractSingleFieldType<Issue> {
     @Nonnull
     @Override
     public List<FieldConfigItemType> getConfigurationItemTypes() {
-        return Lists.newArrayList(new IssueFieldConfigItemType(issueManager, jiraAuthenticationContext));
+        List<FieldConfigItemType> list = super.getConfigurationItemTypes();
+        list.add(new IssueFieldConfigItemType(issueManager, jiraAuthenticationContext, this.fieldConfigSchemeManager, this.projectManager));
+        return list;
     }
 
     /**

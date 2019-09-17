@@ -2,16 +2,20 @@ package com.chy.customfields.type;
 
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
+import com.atlassian.jira.issue.customfields.CustomFieldUtils;
 import com.atlassian.jira.issue.customfields.option.GenericImmutableOptions;
 import com.atlassian.jira.issue.fields.config.FieldConfig;
 import com.atlassian.jira.issue.fields.config.FieldConfigItemType;
+import com.atlassian.jira.issue.fields.config.manager.FieldConfigSchemeManager;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
+import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import org.ofbiz.core.entity.GenericEntityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,10 +27,15 @@ public class IssueFieldConfigItemType implements FieldConfigItemType {
 
     private IssueManager issueManager;
     private JiraAuthenticationContext jiraAuthenticationContext;
+    private FieldConfigSchemeManager fieldConfigSchemeManager;
+    private ProjectManager projectManager;
 
-    public IssueFieldConfigItemType(IssueManager issueManager, JiraAuthenticationContext jiraAuthenticationContext) {
+    public IssueFieldConfigItemType(IssueManager issueManager, JiraAuthenticationContext jiraAuthenticationContext,
+                                    FieldConfigSchemeManager fieldConfigSchemeManager, ProjectManager projectManager) {
         this.issueManager = issueManager;
         this.jiraAuthenticationContext = jiraAuthenticationContext;
+        this.fieldConfigSchemeManager = fieldConfigSchemeManager;
+        this.projectManager = projectManager;
     }
 
     @Override
@@ -52,13 +61,18 @@ public class IssueFieldConfigItemType implements FieldConfigItemType {
     @Override
     public Object getConfigurationObject(Issue issue, FieldConfig fieldConfig) {
 
-        List<Issue> issues = Collections.emptyList();
-        if (issue != null && issue.getProjectId() != null) {
-            try {
-                issues = issueManager.getIssueObjects(issueManager.getIssueIdsForProject(issue.getProjectId()));
-            } catch (GenericEntityException e) {
-                log.error("IssueSelectCFType get option items error", e);
+        List<Issue> issues = new ArrayList<>();
+
+        log.debug(" current issue {}", issue);
+        try {
+            Collection<Long> projectIds = CustomFieldUtils.getProjectIdsFromIssueOrFieldConfig(issue, fieldConfig,
+                    this.fieldConfigSchemeManager, this.projectManager);
+            for (Long pId: projectIds) {
+                issues.addAll(issueManager.getIssueObjects(issueManager.getIssueIdsForProject(pId)));
             }
+            log.debug(" issue items {} ", issues);
+        } catch (GenericEntityException e) {
+            log.error("IssueSelectCFType get option items error", e);
         }
 
         return new GenericImmutableOptions(issues, fieldConfig);
