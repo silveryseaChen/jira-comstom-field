@@ -1,0 +1,94 @@
+<div class="aui-page-panel">
+    <div class="aui-page-panel-inner">
+        <div class="aui-page-panel-nav hidden">
+            <nav class="aui-navgroup aui-navgroup-vertical">
+                <div class="aui-navgroup-inner">
+                    <div class="aui-navgroup-primary">
+
+                    </div>
+                </div>
+            </nav>
+        </div><!-- .aui-page-panel-nav -->
+        <section class="aui-page-panel-content">
+            <table class="jiraform jirapanel  maxWidth">
+                <tbody>
+                <tr>
+                    <td class="jiraformheader">
+                        <h3 class="formtitle">
+                            编辑自定义域选项：<strong>问题选择</strong></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="jiraformbody">
+                        <div class="module">
+                            <div class="mod-content">
+                                <form action="IssueSelectConfigAction.jspa" method="post" name="jiraform"
+                                      onsubmit="if (this.submitted) return false; this.submitted = true; return true"
+                                      data-auto-select-first-done="true">
+                                    <table class="jiraform maxWidth">
+                                        <tbody>
+                                        <tr>
+                                            <td class="fieldLabelArea">
+                                                问题类型
+                                            </td>
+                                            <td class="fieldValueArea">
+                                            ##                                                <input type="text" name="addValue">
+                                                <select name="issueType">
+                                                    #foreach ($item in $issueTypes)
+                                                        <option value="$item.id" #if ($issueType && $issueType == $item.id)
+                                                                selected="selected"#end>$item.name</option>
+                                                    #end
+                                                </select>
+
+                                            </td>
+                                        </tr>
+                                        <tr class="hidden">
+                                            <td>
+                                                <input type="hidden" id="fieldConfigId" name="fieldConfigId"
+                                                       value="$fieldConfigId">
+                                            </td>
+                                        </tr>
+                                        <tr class="hidden">
+                                            <td>
+                                                <input type="hidden" id="selectedParentOptionId"
+                                                       name="selectedParentOptionId">
+                                            </td>
+                                        </tr>
+                                        <tr class="hidden">
+                                            <td>
+                                                <input type="hidden" id="addSelectValue" name="addSelectValue"
+                                                       value="true">
+                                            </td>
+                                        </tr>
+                                        <tr class="buttons-container">
+                                            <td class="jiraformfooter">&nbsp;</td>
+                                            <td colspan="1">
+                                                <div class="buttons-container">
+                                                    <div class="buttons">
+                                                        <input type="submit" name="添加" value="添加" id="add_submit"
+                                                               accesskey="S" title="按 Alt+S 提交" class="aui-button ">
+                                                        <input class="aui-button" type="button" value="取消"
+                                                               onclick="location.href='ConfigureCustomField!default.jspa?customFieldId=$customFieldId'">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" id="atl_token" name="atl_token" value="$atl_token">
+                                </form>
+                                <script language="javascript" type="text/javascript">
+                                    jQuery(function () {
+                                        var form = AJS.$("form[name='jiraform']");
+                                        form.find(":input:visible:first").focus();
+                                        form.attr('data-auto-select-first-done', 'true');
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section><!-- .aui-page-panel-content -->
+    </div><!-- .aui-page-panel-inner --></div>

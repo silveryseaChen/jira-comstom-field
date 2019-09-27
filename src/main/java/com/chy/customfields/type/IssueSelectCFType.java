@@ -5,6 +5,7 @@ import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.customfields.impl.AbstractSingleFieldType;
 import com.atlassian.jira.issue.customfields.impl.FieldValidationException;
 import com.atlassian.jira.issue.customfields.manager.GenericConfigManager;
+import com.atlassian.jira.issue.customfields.manager.OptionsManager;
 import com.atlassian.jira.issue.customfields.persistence.CustomFieldValuePersister;
 import com.atlassian.jira.issue.customfields.persistence.PersistenceFieldType;
 import com.atlassian.jira.issue.fields.config.FieldConfigItemType;
@@ -38,6 +39,8 @@ public class IssueSelectCFType extends AbstractSingleFieldType<Issue> {
     private FieldConfigSchemeManager fieldConfigSchemeManager;
     @ComponentImport
     private ProjectManager projectManager;
+    @ComponentImport
+    private OptionsManager optionsManager;
 
     @Inject
     public IssueSelectCFType(CustomFieldValuePersister customFieldValuePersister,
@@ -45,12 +48,14 @@ public class IssueSelectCFType extends AbstractSingleFieldType<Issue> {
                              IssueManager issueManager,
                              JiraAuthenticationContext jiraAuthenticationContext,
                              FieldConfigSchemeManager fieldConfigSchemeManager,
-                             ProjectManager projectManager) {
+                             ProjectManager projectManager,
+                             OptionsManager optionsManager) {
         super(customFieldValuePersister, genericConfigManager);
         this.issueManager = issueManager;
         this.jiraAuthenticationContext = jiraAuthenticationContext;
         this.fieldConfigSchemeManager = fieldConfigSchemeManager;
         this.projectManager = projectManager;
+        this.optionsManager = optionsManager;
     }
 
     /**
@@ -61,7 +66,8 @@ public class IssueSelectCFType extends AbstractSingleFieldType<Issue> {
     @Override
     public List<FieldConfigItemType> getConfigurationItemTypes() {
         List<FieldConfigItemType> list = super.getConfigurationItemTypes();
-        list.add(new IssueFieldConfigItemType(issueManager, jiraAuthenticationContext, this.fieldConfigSchemeManager, this.projectManager));
+        list.add(new IssueFieldConfigItemType(issueManager, jiraAuthenticationContext,
+                this.fieldConfigSchemeManager, this.projectManager, this.optionsManager));
         return list;
     }
 
