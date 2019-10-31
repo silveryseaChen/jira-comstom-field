@@ -1,0 +1,25 @@
+#disable_html_escaping()
+#if ($value)
+    #set ($selectedValues = $value)
+#end
+$!{auiparams.put("controlHeaderClass", "aui-field-multiselect")}
+#searcherEditHeader (${customField.id} ${customField.name})
+#if ($displayParameters.checkboxmultiselect)
+<select class="select js-default-checkboxmultiselect" id="searcher-$customField.id" multiple="multiple" name="$customField.id" size="#minSelectSize ($configs.options 1 5)">
+    #foreach ($option in $allOptions)
+        #set ($name = $cfValueEncoder.encodeForHtml($option.summary))
+
+        <option
+            #if ($selectedValues && $selectedValues.contains($option.key)) selected="selected" #end
+                                 title="$name"
+                                 value="$option.key">
+            $name
+        </option>
+    #end
+</select>
+#else
+
+#end
+
+#searcherEditFooter (${customField.id} ${customField.descriptionProperty.viewHtml})
+$!{auiparams.clear()}

@@ -1,0 +1,13 @@
+#disable_html_escaping()
+#searcherHeader ($customField)
+
+#if ($displayParameters.checkboxmultiselect)
+    #foreach ($option in $selectedOptions)
+        #set ($name = $cfValueEncoder.encodeForHtml($!option.summary))
+        $name#commaonly($selectedOptions)
+    #end
+#else
+
+#end
+
+#searcherFooter ($customField)

@@ -1,6 +1,7 @@
 package com.chy.customfields.searcher;
 
 import com.atlassian.jira.JiraDataTypes;
+import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.customfields.SingleValueCustomFieldValueProvider;
 import com.atlassian.jira.issue.customfields.searchers.AbstractInitializationCustomFieldSearcher;
 import com.atlassian.jira.issue.customfields.searchers.CustomFieldSearcherClauseHandler;
@@ -8,11 +9,13 @@ import com.atlassian.jira.issue.customfields.searchers.SimpleAllTextCustomFieldS
 import com.atlassian.jira.issue.customfields.searchers.information.CustomFieldSearcherInformation;
 import com.atlassian.jira.issue.customfields.searchers.renderer.CustomFieldRenderer;
 import com.atlassian.jira.issue.customfields.searchers.transformer.CustomFieldInputHelper;
+import com.atlassian.jira.issue.customfields.statistics.CustomFieldStattable;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.index.indexers.FieldIndexer;
 import com.atlassian.jira.issue.search.searchers.information.SearcherInformation;
 import com.atlassian.jira.issue.search.searchers.renderer.SearchRenderer;
 import com.atlassian.jira.issue.search.searchers.transformer.SearchInputTransformer;
+import com.atlassian.jira.issue.statistics.StatisticsMapper;
 import com.atlassian.jira.jql.operand.JqlOperandResolver;
 import com.atlassian.jira.jql.operator.OperatorClasses;
 import com.atlassian.jira.jql.query.FreeTextClauseQueryFactory;
@@ -29,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by chy on 19/9/10.
  */
 @Scanned
-public class IssueSelectCFSearcher extends AbstractInitializationCustomFieldSearcher {
+public class IssueSelectCFSearcher extends AbstractInitializationCustomFieldSearcher  implements CustomFieldStattable {
 
     private volatile CustomFieldSearcherClauseHandler customFieldSearcherClauseHandler;
     private volatile CustomFieldSearcherInformation searcherInformation;
@@ -41,14 +44,18 @@ public class IssueSelectCFSearcher extends AbstractInitializationCustomFieldSear
     FieldVisibilityManager fieldVisibilityManager;
     @ComponentImport
     private CustomFieldInputHelper customFieldInputHelper;
+    @ComponentImport
+    private IssueManager issueManager;
 
     @Inject
     public IssueSelectCFSearcher(JqlOperandResolver jqlOperandResolver,
                                  FieldVisibilityManager fieldVisibilityManager,
-                                 CustomFieldInputHelper customFieldInputHelper){
+                                 CustomFieldInputHelper customFieldInputHelper,
+                                 IssueManager issueManager){
         this.jqlOperandResolver = jqlOperandResolver;
         this.fieldVisibilityManager = fieldVisibilityManager;
         this.customFieldInputHelper = customFieldInputHelper;
+        this.issueManager = issueManager;
     }
 
     @Override
@@ -89,5 +96,10 @@ public class IssueSelectCFSearcher extends AbstractInitializationCustomFieldSear
     @Override
     public SearchRenderer getSearchRenderer() {
         return this.searchRenderer;
+    }
+
+    @Override
+    public StatisticsMapper getStatisticsMapper(CustomField customField) {
+        return new IssueSelectStatisticsMapper(customField, issueManager);
     }
 }
