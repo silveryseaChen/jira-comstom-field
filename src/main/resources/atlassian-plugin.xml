@@ -16,9 +16,10 @@
         
         <resource type="download" name="jira-comstom-field.css" location="/css/jira-comstom-field.css"/>
         <resource type="download" name="jira-comstom-field.js" location="/js/jira-comstom-field.js"/>
+        <resource type="download" name="event.js" location="/js/event.js"/>
         <resource type="download" name="images/" location="/images"/>
 
-        <context>jira-comstom-field</context>
+        <context>jira.general</context>
     </web-resource>
 
     <customfield-type key="issueSelectCFType" name="issue select type" class="com.chy.customfields.type.IssueSelectCFType">
