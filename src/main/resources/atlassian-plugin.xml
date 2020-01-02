@@ -13,7 +13,7 @@
     <!-- add our web resources -->
     <web-resource key="jira-comstom-field-resources" name="jira-comstom-field Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
+
         <resource type="download" name="jira-comstom-field.css" location="/css/jira-comstom-field.css"/>
         <resource type="download" name="jira-comstom-field.js" location="/js/jira-comstom-field.js"/>
         <resource type="download" name="event.js" location="/js/event.js"/>
@@ -27,7 +27,7 @@
             Choose a issue from the project.
         </description>
         <resource type="velocity" name="view"  location="templates/customfields/issue-select/type/view-issue.vm" />
-        <resource type="velocity" name="edit" location="templates/customfields/issue-select/type/edit-issue.vm" />
+        <resource type="velocity" name="edit" location="templates/customfields/issue-select/type/edit.vm" />
         <resource type="velocity" name="xml" location="templates/customfields/issue-select/type/xml-issue.vm" />
     </customfield-type>
 
@@ -51,7 +51,6 @@
         <resource type="velocity" name="label" location="templates/customfields/issue-select/searcher/label-issue.vm"/>
         <resource type="velocity" name="search" location="templates/customfields/issue-select/searcher/search-input-issue.vm"/>
         <resource type="velocity" name="view" location="templates/customfields/issue-select/searcher/view-issue.vm"/>
-
         <valid-customfield-type package="${atlassian.plugin.key}" key="issueSelectCFType"/>
     </customfield-searcher>
 

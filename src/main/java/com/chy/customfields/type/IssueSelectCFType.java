@@ -119,7 +119,7 @@ public class IssueSelectCFType extends AbstractSingleFieldType<Issue> {
      */
     @Override
     public String getStringFromSingularObject(Issue issue) {
-        return issue.getKey();
+        return issue == null? null: issue.getKey();
     }
 
     /**
